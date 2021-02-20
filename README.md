@@ -241,23 +241,32 @@ Java 有 8 种基础数据类型，如下：
 
 ### Part 2 文件解释
 
-[TODO]
+| 文件名        | 备注                                             |
+| ------------- | ------------------------------------------------ |
+| assets        | Minecraft 资源文件，不要删除                     |
+| config        | 客户端模组配置文件                               |
+| logs          | 游戏日志                                         |
+| mods          | 模组文件夹。模组放到这个文件夹                   |
+| resourcepacks | 资源包文件夹，也就是材质包。材质包放到这个文件夹 |
+| saves         | 单人游戏存档文件夹                               |
+| servers.dat   | 存储多人游戏服务器列表                           |
+| crash-reports | 崩溃日志，可通过分析里面的日志找出崩溃原因       |
+| versions | 版本文件夹，jar 文件和一些 dll 在里面，不要删除 |
+此外，还有一些文件。在这里不再介绍。
 
 ### Part 3 辅助 Mod 推荐
 
-| 名称                             | 链接                                         |
-| -------------------------------- | -------------------------------------------- |
-| JourneyMap(小地图)               | http://www.mcbbs.net/thread-612917-1-1.html  |
-| DamageIndicators(伤害与血量显示) | https://www.mcbbs.net/thread-137281-1-1.html |
-| InputFix(中文输入)               | http://www.mcbbs.net/thread-83941-1-1.html   |
-| Optifine(高清修复)               | http://www.mcbbs.net/thread-606019-1-1.html  |
-| MouseTweak(鼠标手势)             | http://www.mcbbs.net/thread-69677-1-1.html   |
-| BetterFPS(优化)                  | http://www.mcbbs.net/thread-539780-1-10.html |
-| InventoryTweaks(R键整理)         | http://www.mcbbs.net/thread-877466-1-1.html  |
-| CustomSkinLoader(皮肤)           | http://www.mcbbs.net/thread-269807-1-1.html  |
-| NoEnoughItems(NEI)(合成表)       | http://www.mcbbs.net/thread-389937-1-1.html  |
-
-
+| 名称                             | 链接                                          |
+| -------------------------------- | --------------------------------------------- |
+| JourneyMap(小地图)               | https://www.mcbbs.net/thread-612917-1-1.html  |
+| DamageIndicators(伤害与血量显示) | https://www.mcbbs.net/thread-137281-1-1.html  |
+| InputFix(中文输入)               | https://www.mcbbs.net/thread-83941-1-1.html   |
+| Optifine(高清修复)               | https://www.mcbbs.net/thread-606019-1-1.html  |
+| MouseTweak(鼠标手势)             | https://www.mcbbs.net/thread-69677-1-1.html   |
+| BetterFPS(优化)                  | https://www.mcbbs.net/thread-539780-1-10.html |
+| InventoryTweaks(R键整理)         | https://www.mcbbs.net/thread-877466-1-1.html  |
+| CustomSkinLoader(皮肤)           | https://www.mcbbs.net/thread-269807-1-1.html  |
+| NoEnoughItems(NEI)(合成表)       | https://www.mcbbs.net/thread-389937-1-1.html  |
 
 ## 五、自动赞助系统
 
@@ -278,7 +287,123 @@ Java 有 8 种基础数据类型，如下：
 
 在你的服务器安装好这些插件后，我们需要找一个靠谱的自动发卡平台。一定要靠谱。有条件的可以自己搭建一个发卡平台。
 
+决定你的点券汇率，比如 1 元 = 10 点券，1 元 = 100 点券。根据你的喜好来。
+
 ### Part 2 自动发放点券
+
+> 以生成 10 点券激活码为例。
+
+使用 CommandCode 生成 100 条兑换 10 点券的激活码。
+
+输入以下指令：
+
+> 在控制台输入请删掉 "/"
+
+```
+/code create 100 points give %player% 10
+```
+
+生成完以后，输入
+
+```
+/code output 10 points give %player% 10
+```
+
+输入完后到 `plugins/CommandCode` 内可以找到 `10.txt`，里面就是你生成的激活码，导入到发卡平台即可。
+
+现在玩家可以购买到卡密并兑换点券了。这样我们就可以写点券商城，让玩家消费了。
+
+用 ChestCommands 写点券商城。ChestCommands 有编辑器，但我推荐初学者手写，熟练后，手写比编辑器还快。
+
+放一个样例，以下是样例展示内容：
+
+- 菜单显示 6 行。
+- 菜单标题为「点券商城」
+- 10 点券购买一个石头且购买后给予提示
+
+```
+name: '点券商城'
+rows: 6
+auto-refresh: 5
+stone:
+  COMMAND: 'give: 1, 1;tell: &b服务器&7>>>&a购买成功。'
+  NAME: '&a购买石头'
+  LORE:
+  - '&7⊙ &f石头10点券/个'
+  ID: 1
+  POINTS: 10
+  POSITION-X: 1
+  POSITION-Y: 1
+```
+
+### Part 3 自动发放大量物品
+
+我们知道，模组服务器的赞助礼包通常有大量物品。
+
+本小节用 热力膨胀、CustomNPC 模组做示范，并使用 CommandCode,RPGItem,EasyKitsRel 插件配合。
+
+1. 用 RPGItem 创建一个物品，并命名为兑换券。
+2. 保证背包内只有一个兑换券，然后使用 EasyKitsRel 插件创建一个礼包。
+3. 使用热力膨胀的谐振保险箱，并附魔扩容 IV，将保险箱扩容到最大容量。
+4. 将你想发放的物品塞进去。然后打开并关闭一次保险箱，鼠标中键复制。
+5. 在主城等地设置 NPC，使用兑换券兑换保险箱。
+6. 用 CommandCode 插件，创建领取兑换券，切换权限组的激活码，然后上架发卡平台。
+
+至此，你已经学会了如何自动发放物品。
+
+## 六、在 CentOS 系统上使用宝塔面板搭建并使用 MySQL
+
+[宝塔面板](www.bt.cn) 是一个简单好用的服务器运维面板，你可以在你的独立机或 VPS 上安装，使用数据库，搭建网站等。面板形式，上手难度低。
+
+Windows 版宝塔面板安装过于简单，这里不作介绍。只介绍 Linux 版。如果你需要在其它 Linux 发行版的安装方式，可自行到宝塔官网查询。
+
+### Part 1 安装宝塔面板
+
+1. 以 root 身份进入终端，输入 `yum update` 更新软件库。
+2. 到宝塔官网找到一键安装指令，并执行。
+
+附 CentOS 版安装命令：
+
+```
+yum install -y wget && wget -O install.sh http://download.bt.cn/install/install_6.0.sh && sh install.sh
+```
+
+安装宝塔面板需要几分钟的时间，请耐心等待。
+
+安装完成后会提示一段信息。
 
 [TODO]
 
+## 七、论如何挑选管理组成员
+
+> **本章内容仅供参考，请根据自己的实际情况斟酌决定**
+
+随着服务器规模的变大，服主自己一个人管理很累。这时候就要找一些帮手，组建管理组。这里给大家一些建议。
+
+应聘的人联系你时，询问他的年龄。以 14 岁为界，越小越不推荐收。如果你觉得他的年龄和他的行为不符，让他发一句语音。如果他不发，Be careful.
+
+然后问他会什么，如果他回答「建筑」、「技术」之类含糊的词语，就继续详细的询问，询问他是否有公开作品。如果没有作品，让他现在就建筑、写一段代码。如果他不愿意，或找各种理由推脱，建议直接放弃此人。
+
+如果应聘管理，可以让他先到服务器玩几天，观察一下。没有什么恶劣行为，就慢慢给予一些管理权限，然后听玩家反馈，暂时不要给 OP。观察一阵子后，没有恶劣行为就正式给予 OP 权限。脾气暴躁的 OP，能不招就不招。
+
+如果工资需求与技术水平相差较大，建议放弃。
+
+招聘完后，建立管理组群，把他们邀请进去。每个人分配好职务。服务器宣传帖、物理服务器需要服主控制。
+
+**永远不要给背叛过你的人第二次机会，因为他还会背叛你的**。
+
+## 八、论如何做好服主自己
+
+> **本章内容仅供参考，请根据自己的实际情况斟酌决定**
+
+大家开服的原因有很多，无非存在以下几条：
+
+- 单纯以盈利为目的
+- 用爱发电，单纯开个公益服
+- 为了做好服务器的荣誉感，得到玩家的认可
+
+如果一个服务器管理组态度差，玩家可能会不满，甚至退服。屡次出现这种情况时，应该考虑一下自己和管理组的问题。
+
+### Part 1 服主应该做的
+
+[TODO]
