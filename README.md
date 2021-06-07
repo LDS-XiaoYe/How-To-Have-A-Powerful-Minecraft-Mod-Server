@@ -380,7 +380,7 @@ yum install -y wget && wget -O install.sh http://download.bt.cn/install/install_
 
 随着服务器规模的变大，服主自己一个人管理很累。这时候就要找一些帮手，组建管理组。这里给大家一些建议。
 
-应聘的人联系你时，询问他的年龄。以 14 岁为界，越小越不推荐收。如果你觉得他的年龄和他的行为不符，让他发一句语音。如果他不发，Be careful.
+应聘的人联系你时，询问他的年龄。以 14 岁为界，越小越不推荐收。
 
 然后问他会什么，如果他回答「建筑」、「技术」之类含糊的词语，就继续详细的询问，询问他是否有公开作品。如果没有作品，让他现在就建筑、写一段代码。如果他不愿意，或找各种理由推脱，建议直接放弃此人。
 
@@ -434,9 +434,14 @@ yum install -y wget && wget -O install.sh http://download.bt.cn/install/install_
 通常压测分为以下两种：
 
 - MOTD 压测
+  
+  > MOTD 就是在客户端的服务器列表中，服务器显示的标语。
+  
   - 不断刷新你的 MOTD，消耗大量资源。
   - MOTD 就是打开 Minecraft 多人游戏服务器列表时，服务器显示的标语。
+  
 - 假人压测
+  
   - 不断让假人进出服务器，消耗大量资源。
 
 DDoS 的中文名是分布式拒绝服务，参考百度百科的解释：
@@ -496,12 +501,6 @@ authlib-injector 通过劫持 Mojang 的正版验证 API 实现外置登录。�
 ## 番外 1 我个人从小白到开服的经历
 
 <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1475596788&auto=0&height=66"></iframe>
-
-> 原 BGM：我在这 挺好的
->
-> 本帖重写计划于 2021 年 2 月启动，正值春节期间。许多人因疫情防控，响应国家号召，就地过年，没有与家人团聚。
->
-> 因为题主一直咕咕咕，到了 2021 年的 5 月才做出一些修正，所以换了 BGM。
 
 开服本身就不是什么简单的事。坚持下来，长期维护一个服务器更难。
 
